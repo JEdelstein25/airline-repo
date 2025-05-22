@@ -1,0 +1,249 @@
+openapi: 3.0.0
+info:
+  title: Loyalty Program API
+  version: 1.0.0
+  description: API for managing airline loyalty programs and members
+
+paths:
+  /airlines/{airlineId}/loyalty-programs:
+    get:
+      summary: Get all loyalty programs for an airline
+      operationId: getLoyaltyProgramsByAirline
+      parameters:
+        - name: airlineId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of loyalty programs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoyaltyProgram'
+    post:
+      summary: Create a new loyalty program
+      operationId: createLoyaltyProgram
+      parameters:
+        - name: airlineId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoyaltyProgramInput'
+      responses:
+        '201':
+          description: Created loyalty program
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoyaltyProgram'
+
+  /loyalty-programs/{programId}:
+    get:
+      summary: Get a loyalty program by ID
+      operationId: getLoyaltyProgram
+      parameters:
+        - name: programId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Loyalty program
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoyaltyProgram'
+
+  /loyalty-programs/{programId}/members:
+    get:
+      summary: Get all members of a loyalty program
+      operationId: getLoyaltyMembersByProgram
+      parameters:
+        - name: programId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of loyalty members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoyaltyMember'
+    post:
+      summary: Enroll a passenger in a loyalty program
+      operationId: createLoyaltyMember
+      parameters:
+        - name: programId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoyaltyMemberInput'
+      responses:
+        '201':
+          description: Created loyalty member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoyaltyMember'
+
+  /loyalty-members/{memberId}:
+    get:
+      summary: Get a loyalty member by ID
+      operationId: getLoyaltyMember
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Loyalty member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoyaltyMember'
+
+  /loyalty-members/{memberId}/points:
+    post:
+      summary: Add points to a loyalty member's account
+      operationId: addLoyaltyPoints
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - points
+              properties:
+                points:
+                  type: integer
+                  description: Number of points to add
+      responses:
+        '200':
+          description: Updated loyalty member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoyaltyMember'
+
+components:
+  schemas:
+    LoyaltyProgramInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the loyalty program
+
+    LoyaltyProgram:
+      type: object
+      required:
+        - id
+        - airlineId
+        - name
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        airlineId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    LoyaltyMemberInput:
+      type: object
+      required:
+        - passengerId
+        - membershipNumber
+      properties:
+        passengerId:
+          type: string
+          format: uuid
+        membershipNumber:
+          type: string
+        tier:
+          type: string
+          enum: [Basic, Silver, Gold, Platinum]
+          default: Basic
+        points:
+          type: integer
+          default: 0
+
+    LoyaltyMember:
+      type: object
+      required:
+        - id
+        - loyaltyProgramId
+        - passengerId
+        - membershipNumber
+        - tier
+        - points
+        - joinDate
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        loyaltyProgramId:
+          type: string
+          format: uuid
+        passengerId:
+          type: string
+          format: uuid
+        membershipNumber:
+          type: string
+        tier:
+          type: string
+          enum: [Basic, Silver, Gold, Platinum]
+        points:
+          type: integer
+        joinDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
