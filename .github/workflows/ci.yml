@@ -21,7 +21,7 @@ jobs:
           cache-dependency-path: "**/*.sum"
       - uses: actions/setup-node@v4
         with:
-          node-version-file: .tool-versions
+          node-version: '20'
       - name: Set pnpm version from .tool-versions
         run: |
           PNPM_VERSION=$(grep pnpm .tool-versions | awk '{print $2}')
