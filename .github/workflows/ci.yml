@@ -39,6 +39,8 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-pnpm-store-
       # Go tests
+      - name: Copy airports data file
+        run: mkdir -p api-server/extdata && cp airports.data.gob api-server/extdata/
       - name: Run Go tests
         run: cd api-server && go test ./...
       # Web tests
