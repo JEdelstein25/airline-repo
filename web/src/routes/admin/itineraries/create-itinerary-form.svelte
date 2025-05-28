@@ -4,7 +4,7 @@
 	import * as Form from '$lib/components/ui/form'
 	import { Input } from '$lib/components/ui/input'
 	import CircleAlert from 'lucide-svelte/icons/circle-alert'
-import { isFeatureFlagEnabled } from '$lib/feature-flags'
+
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms'
 	import { typebox } from 'sveltekit-superforms/adapters'
 
@@ -32,31 +32,38 @@ import { isFeatureFlagEnabled } from '$lib/feature-flags'
 	class="flex flex-col gap-6 items-start"
 	data-testid="itinerary-form"
 >
-	{#if isFeatureFlagEnabled('booking.multi-city')}
-		<!-- Multi-city booking form fields would go here -->
-		<!-- <Form.Field {form} name="legCount">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Form.Label>Number of cities</Form.Label>
-					<Input {...props} type="number" min="2" max="5" />
-				{/snippet}
-			</Form.Control>
-		</Form.Field> -->
-	{/if}
-	<Form.Field {form} name="name">
+	<Form.Field {form} name="flightIDs">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Name</Form.Label>
+				<Form.Label>Flight IDs</Form.Label>
 				<Input
 					{...props}
-					bind:value={$formData.name}
+					bind:value={$formData.flightIDs}
 					autocomplete="off"
 					class="w-96"
-					{...$constraints.name}
+					{...$constraints.flightIDs}
+					placeholder="Enter flight IDs (comma-separated)"
 				/>
 			{/snippet}
 		</Form.Control>
-		<Form.Description>Full legal name</Form.Description>
+		<Form.Description>Flight IDs for this itinerary</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="passengerIDs">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Passenger IDs</Form.Label>
+				<Input
+					{...props}
+					bind:value={$formData.passengerIDs}
+					autocomplete="off"
+					class="w-96"
+					{...$constraints.passengerIDs}
+					placeholder="Enter passenger IDs (comma-separated)"
+				/>
+			{/snippet}
+		</Form.Control>
+		<Form.Description>Passenger IDs for this itinerary</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button>{props.submitLabel}</Form.Button>
