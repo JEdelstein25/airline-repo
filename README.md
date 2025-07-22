@@ -1,5 +1,7 @@
 # Airline (demo app)
 
+A demo airline booking and management application.
+
 ## Usage
 
 ```shell
