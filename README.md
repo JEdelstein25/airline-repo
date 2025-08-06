@@ -1,4 +1,5 @@
 # Airline (demo app)
+A full-stack airline booking demonstration with Go backend and modern web frontend.
 
 ## Usage
 
