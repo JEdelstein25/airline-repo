@@ -1,5 +1,9 @@
 # Airline (demo app)
 
+A comprehensive airline management system built with Go and SvelteKit.
+
+*Amp was here!*
+
 ## Usage
 
 ```shell
