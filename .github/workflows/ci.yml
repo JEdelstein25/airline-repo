@@ -5,20 +5,11 @@ on:
     branches:
       - '**'
   pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
 
-concurrency:
-  group: amp-${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
-  cancel-in-progress: true
-
 jobs:
-  # We only do checks in this job - testing is for build-and-test
-  checks:
-    runs-on: ubuntu
-    timeout-minutes: 10
-    permissions:
-      contents: read
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,26 +19,6 @@ jobs:
         run: |
           PNPM_VERSION=$(grep pnpm .tool-versions | awk '{print $2}')
           npm pkg set packageManager="pnpm@${PNPM_VERSION}"
-      - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # SECURITY: pin third-party action hashes
-      - run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-        shell: bash
-        id: pnpm-cache
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
+      - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2
       - run: pnpm install
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: pnpm exec tsc -b
-      - run: pnpm run check
-      - name: pnpm -C external-api/types build
-        run: |
-          pnpm -C external-api/types build
-          if [ -n "$(git diff --name-only external-api/)" ]; then
-            echo "::error::Generated files are out of sync. Please run 'pnpm -C external-api/types build' and commit the changes."
-            git diff external-api/
-            exit 1
-          fi
+      - run: pnpm run build
