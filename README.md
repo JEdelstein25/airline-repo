@@ -2,8 +2,6 @@
 
 A comprehensive airline management system built with Go and SvelteKit.
 
-*Amp was here!*
-
 ## System Overview
 
 This airline management platform demonstrates production-ready architecture with:
