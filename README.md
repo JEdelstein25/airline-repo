@@ -1,5 +1,24 @@
 # Airline (demo app)
 
+A comprehensive airline management system built with Go and SvelteKit.
+
+## System Overview
+
+This airline management platform demonstrates production-ready architecture with:
+
+- **Type-Safe API**: OpenAPI 3.0 specification with auto-generated Go server and TypeScript client
+- **Sophisticated Scheduling**: Timezone-aware flight scheduling with automatic flight generation from recurring schedules
+- **Geographic Intelligence**: Great circle distance calculations and interactive D3.js world maps with flight route visualization
+- **Complete Booking System**: End-to-end passenger itineraries with seat assignments and ticket management
+- **Fleet Management**: Comprehensive aircraft and fleet operations with IATA/ICAO standard compliance
+
+### Key Features
+- Interactive flight route mapping with topographic world visualization
+- Real-time schedule synchronization and timezone handling
+- External data integration with OurAirports database
+- Mobile-responsive interface with dark/light theme support
+- Full-stack type safety from database to frontend
+
 ## Usage
 
 ```shell
